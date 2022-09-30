@@ -1,0 +1,38 @@
+<!--
+ * @Author: tackchen
+ * @Date: 2022-08-29 11:00:34
+ * @Description: Coding something
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <button onclick="start()">start</button>
+    <script src="https://unpkg.com/callapp-lib"></script>
+    <script>
+        
+        function start(){
+            const callLib = new CallApp({
+            scheme: {
+                protocol: 'gamereva'//APP 协议，URL Scheme 的 scheme 字段，就是你要打开的 APP 的标识
+            },
+                // scheme: 'gamereva://native.page.CGChangWanPlay?game_id=%d&game_icon=%s&device_id=%s&device_session=%s'
+            });
+            callLib.open({
+                param: {
+                    'game_id': '111',
+                    'game_icon': '22',
+                    'device_id': '11',
+                    'device_session': ''
+                },
+                path: 'native.page.CGChangWanPlay',
+            });
+        }
+    </script>
+</body>
+</html>

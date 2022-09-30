@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0;" name="viewport" />
+  <meta name="Apple-mobile-web-app-capable" content="yes">
+  <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
+  <title>input focus</title>
+  <style>
+    body{
+      height: 1000px;
+    }
+    #full{
+      position: fixed;top: 0;left: 0;width: 100%;background-color: rgba(0,0,0,.5);
+    }
+    #block{
+      position: absolute;top: 100px;left: 100px;width: 100px;height:100px;background-color: rgba(0,0,0,.5);
+    }
+  </style>
+</head>
+<body>
+  <div id='full'>
+    <input type="text" id='input'>
+    <div>
+        <button onclick="focus()">focus</button>
+        <button onclick="click()">click</button>
+        <button onclick="focusClick()">focus & click</button>
+        <button onclick="clickFocus()">click & focus</button>
+    </div>
+    <div>
+        <button onclick="focus(true)">focus timeout</button>
+        <button onclick="click(true)">click timeout</button>
+        <button onclick="focusClick(true)">focus & click timeout</button>
+        <button onclick="clickFocus(true)">click & focus timeout</button>
+    </div>
+  </div>
+  <script>
+        var input = document.getElementById('input')
+        function focus(timeout) {
+            checkTimeout(()=>{
+                input.focus()
+            }, timeout)
+        }
+        function click(timeout) {
+            checkTimeout(()=>{
+                input.click()
+            }, timeout)
+        }
+        function focusClick(timeout) {
+            checkTimeout(()=>{
+                input.focus()
+                input.click()
+            }, timeout)
+        }
+        function clickFocus(timeout) {
+            checkTimeout(()=>{
+                input.click()
+                input.focus()
+            }, timeout)
+        }
+        function checkTimeout(fn, timeout){
+            if(timeout){
+                setTimeout(()=>{
+                    fn()
+                },30)
+            }else{
+                fn()
+            }
+        }
+  </script>
+</body>
+</html>

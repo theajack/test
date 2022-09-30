@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>iosimg</title>
+    <style>
+    </style>
+</head>
+<body>
+    <script src="https://cdn.jsdelivr.net/gh/theajack/easy-dom/cdn/easydom.latest.min.js"></script>
+    <img id='img1' src='https://gamer.cdn-go.cn/cloudgame-h5/latest/images/wmsj-bg.png' alt="">
+    <img id='img2' src='https://gamer.cdn-go.cn/cloudgame-h5/latest/images/wmsj-bg.png' alt="">
+    <script>
+        let $ = EasyDom;
+        $.query('#img2').on('touchstart', (e)=>{
+            e.preventDefault();
+            console.log('e.preventDefault');
+        })
+    </script>
+</body>
+</html>

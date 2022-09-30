@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0;" name="viewport" />
+    <title>Document</title>
+    <style>
+        #container{
+            background-color: #ddd;
+            color: #222;
+            user-select: none;
+            position: fixed;
+            top:0;
+            left: 0;
+        }
+    </style>
+</head>
+<body>
+    <script>
+        (function () { var script = document.createElement('script'); script.src="https://cdn.jsdelivr.net/npm/eruda"; document.body.appendChild(script); script.onload = function () { eruda.init() } })();
+        addListener('mousedown');
+        addListener('mouseup');
+        addListener('mousemove');
+        addListener('touchstart');
+        addListener('touchmove');
+        addListener('touchend');
+
+        function addListener(name){
+          window.addEventListener(name, function(e) { console.log(name, e)});
+        }
+    </script>
+</body>
+</html>

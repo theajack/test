@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <button onclick="AudioPlayer.begin()">play1</button>
+    <button onclick="AudioPlayer.close()">play2</button>
+    <button onclick="AudioPlayer.confirm()">play3</button>
+    <button onclick="AudioPlayer.drag()">play4</button>
+    <button onclick="playSound()">play ac</button>
+    
+    <script>
+
+const Audios = {};
+
+function initAudioPlayer() {
+    ['begin', 'close', 'confirm', 'drag'].forEach((key) => {
+        Audios[key] = initAudio(key);
+    });
+}
+
+function initAudio(key){
+    const src = `https://gamer.cdn-go.cn/static/v1.1.46/h5/audio/great-wall/ui_${key}.mp3`;
+    const audio = document.createElement('audio');
+    audio.autoplay = false;
+    audio.src = src;
+    return audio;
+}
+
+function play(name) {
+    if (Audios[name]) {
+        Audios[name].play();
+        Audios[name] = initAudio(name);
+    }
+}
+
+const AudioPlayer = {
+    begin() {
+        play('begin');
+    },
+    close() {
+        play('close');
+    },
+    confirm() {
+        play('confirm');
+    },
+    drag() {
+        play('drag');
+    },
+};
+
+initAudioPlayer();
+
+
+
+window.AudioContext = window.AudioContext || window.webkitAudioContext || window.mozAudioContext || window.msAudioContext;
+    var context = new window.AudioContext();;
+    var source = null;
+    var audioBuffer = null;
+
+    function stopSound() {
+        if (source) {
+            source.stop(0); //立即停止
+        }
+    }
+
+    function playSound() {
+        source = context.createBufferSource();
+        source.buffer = audioBuffer;
+        // source.loop = true; //循环播放
+        source.connect(context.destination);
+        source.start(0); //立即播放
+    }
+
+    function initSound(arrayBuffer) {
+        context.decodeAudioData(arrayBuffer, function(buffer) { //解码成功时的回调函数
+            audioBuffer = buffer;
+        }, function(e) { //解码出错时的回调函数
+            console.log('Error decoding file', e);
+        });
+    }
+
+    function loadAudioFile(url) {
+        var xhr = new XMLHttpRequest(); //通过XHR下载音频文件
+        xhr.open('GET', url, true);
+        xhr.responseType = 'arraybuffer';
+        xhr.onload = function(e) { //下载完成
+            initSound(this.response);
+        };
+        xhr.send();
+    }
+    loadAudioFile('https://gamer.cdn-go.cn/static/v1.1.46/h5/audio/great-wall/ui_drag.mp3');
+
+
+    </script>
+</body>
+</html>

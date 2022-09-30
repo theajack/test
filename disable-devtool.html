@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id='text'></div>
+    <!--<script>
+        ;(function () {
+            var src = 'http://cdn.jsdelivr.net/eruda/1.0.5/eruda.min.js';
+            if (!/eruda=true/.test(window.location) && localStorage.getItem('active-eruda') != 'true') return;
+            document.write('<scr' + 'ipt src="' + src + '"></scr' + 'ipt>');
+            document.write('<scr' + 'ipt>eruda.init();</scr' + 'ipt>');
+        })();
+    </script>-->
+    <script src='https://cdn.jsdelivr.net/npm/disable-devtool@0.3.0/disable-devtool.min.js'></script>
+    <script>
+        const text = document.getElementById('text');
+        var detectors = getUrlParam('dt')
+        if(!detectors || detectors === 'all'){
+            detectors = 'all'
+        }else{
+            detectors = detectors.split(',')
+        }
+        console.log(detectors);
+        DisableDevtool({
+            md5: '0b9e05caf5000360ec1c263335bd83fe', // ddtk
+            // url: 'https://www.qq.com',
+            ondevtoolopen: function(type) {
+                // window.location.href = 'https://www.qq.com';
+                text.innerHTML += 'devtool opened!; type =' + type + '<br>';
+                // document.body.innerHTML = 'devtool opened!; type =' + type;
+                console.log(window.outerHeight, window.innerHeight)
+                // next();
+                // console.log(next);
+            },
+            clearIntervalWhenDevOpenTrigger: false,
+            interval: 1000,
+            // tkName: 'ddtk',
+            disableMenu: false,
+            // url: 'https://www.baidu.com'
+            detectors: detectors,
+        });
+
+
+
+        function getUrlParam (name) {
+            const search = window.location.search;
+            if (search !== '') {
+                const reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)', 'i');
+                const r = search.substr(1).match(reg);
+                if (r != null) {
+                    return unescape(r[2]);
+                }
+            }
+            return '';
+        }
+        // function isLogRegExpCount3 () {
+        //     return new Promise((resolve) => {
+        //         let count = 0;
+        //         const target = new RegExp();
+        //         target.toString = () => {
+        //             count ++;
+        //             return '';
+        //         };
+        //         console.log(target);
+        //         setTimeout(() => {
+        //             resolve(count);
+        //         }, 100);
+        //     });
+        // }
+
+        // isLogRegExpCount3().then(d=>alert(d))
+    </script>
+</body>
+</html>

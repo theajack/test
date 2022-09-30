@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div>页面B: 获取Cookie</div>
+    <button onclick="getCookie()">Get Cookie: test_cookie</button>
+    <button onclick="window.location.href='https://tackchen.gitee.io/test.html'">返回页面A</button>
+    <div id="info"></div>
+    <script>
+        function getCookie(){
+            document.getElementById('info').innerText = document.cookie;
+        }
+    </script>
+</body>
+</html>

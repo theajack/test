@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div>
+        <input type="text" id='input'>
+        <button onclick="copy()">copy</button>
+    </div>
+    <script>
+        function copy(){
+            copyText(document.getElementById('input').value)
+        }
+        function copyText(text, showTop) {
+            if (text === '') {
+                console.log('复制内容不可为空');
+                return;
+            }
+            let copyInput = document.getElementById('_copyInput_');
+            if (!copyInput) {
+                copyInput = document.createElement('input');
+                copyInput.setAttribute('type', 'text');
+                copyInput.setAttribute('style', 'height:10px;position:fixed;top:-100px;opacity:0;');
+                copyInput.setAttribute('id', '_copyInput_');
+                document.body.appendChild(copyInput);
+            }
+            copyInput.value = text;
+            copyInput.select();
+            if (document.execCommand('Copy')) {
+                if (showTop) {
+                    console.log('复制成功');
+                }
+                return true;
+            }
+            if (showTop) {
+                console.log('复制失败');
+            }
+            copyInput.blur();
+            return false;
+        }
+    </script>
+</body>
+</html>

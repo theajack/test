@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, max-scale=1.0, min-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        (function () { var script = document.createElement('script'); script.src="https://cdn.jsdelivr.net/npm/eruda"; document.body.appendChild(script); script.onload = function () { eruda.init() } })();
+        // 使用webworker执行代码
+        let code = /* javascript*/` 
+        this.addEventListener('message', function (e) {
+            console.log(new Function('arg', e.data.fn)(e.data.arg));
+            this.postMessage('You said: ' + new Function('arg', e.data.fn)(e.data.arg));
+        }, false);
+        `;
+
+        function codeToBlob (code) {
+            let blob = new Blob([code], {type: 'text/javascript'}); // 生成js文件对象
+            let objectURL = window.URL.createObjectURL(blob); // 生成js文件的url
+            return objectURL;
+        }
+
+        let worker = new Worker(codeToBlob(code)); // 使用 blob对象的url
+
+        worker.onmessage = function (event) {
+            console.log('Received message ' + event.data);
+        };
+
+        function execute (fn, arg) {
+            worker.postMessage({
+                fn: `return (${fn.toString()})(arg)`,
+                arg
+            });
+        }
+    </script>
+</body>
+</html>

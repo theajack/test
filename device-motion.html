@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0;" name="viewport" />
+    <title>Document</title>
+    <style>
+        #container{
+            background-color: #ddd;
+            color: #222;
+            user-select: none;
+            position: fixed;
+            top:0;
+            left: 0;
+        }
+    </style>
+</head>
+<body>
+    <div>22-3-30 17:57</div>
+    <button onclick="start()">addEvent</button>
+    <button onclick="removeEvent()">removeEvent</button>
+    <button onclick="toggleLog()">toggleLog</button>
+    <div id="info1"></div>
+    <div id="info2"></div>
+    <div id="info3"></div>
+    <script>
+        
+        (function () { var script = document.createElement('script'); script.src="https://cdn.jsdelivr.net/npm/eruda"; document.body.appendChild(script); script.onload = function () { eruda.init() } })();
+        var log1 = false;
+        var log2 = false;
+        var consoleLog = false
+
+        function toggleLog(){
+          consoleLog = !consoleLog;
+        }
+
+        var devicemotion = function(e) { 
+          if(log1){
+            if(consoleLog){
+              console.log(e);
+            }
+            log1 = false
+            document.getElementById('info1').innerText = `acceleration: \r\n x=${e.acceleration.x}; \r\n y=${e.acceleration.y}; \r\n z=${e.acceleration.z};`
+            document.getElementById('info2').innerText = `rotationRate: \r\n alpha=${e.rotationRate.alpha}; \r\n beta=${e.rotationRate.beta}; \r\n gamma=${e.rotationRate.gamma};`
+          }
+        };
+        var deviceorientation = function(e) { 
+          if(log2){
+            if(consoleLog){
+              console.log(e);
+            }
+            log2 = false
+            document.getElementById('info3').innerText = `deviceorientation: \r\n alpha=${e.alpha}; \r\n beta=${e.beta}; \r\n gamma=${e.gamma}; \r\n accuracy=${e.webkitCompassAccuracy};`
+          }
+        };
+        function addEvent(){
+            console.log('addEvent')
+            window.addEventListener('devicemotion', devicemotion, true);
+            window.addEventListener('deviceorientation', deviceorientation, true);
+        }
+
+        function removeEvent(){
+            window.removeEventListener('devicemotion', devicemotion, true);
+            window.removeEventListener('deviceorientation', deviceorientation, true);
+        }
+        function start(){
+            if(!DeviceMotionEvent){
+                console.error('暂时不支持')
+            }else{
+                if(DeviceMotionEvent.requestPermission){
+                    DeviceMotionEvent.requestPermission().then(permissionState => {
+                        console.log(permissionState)
+                        if (permissionState === 'granted') {
+                            addEvent();
+                        }
+                    }).catch((err) => {
+                        console.error(err);
+                    });
+                }else{
+                    addEvent();
+                }
+            }
+        }
+
+        if(!DeviceMotionEvent.requestPermission){
+            start();
+        }
+
+        setInterval(()=>{
+          log1 = true;
+          log2 = true;
+        }, 1000)
+    </script>
+</body>
+</html>

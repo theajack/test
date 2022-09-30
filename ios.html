@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="Apple-mobile-web-app-capable" content="yes">
+  <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
+  <title>ios safari全屏测试</title>
+  <style>
+    body{
+      height: 1000px;
+    }
+    #full{
+      position: fixed;top: 0;left: 0;width: 100%;background-color: rgba(0,0,0,.5);
+    }
+    #block{
+      position: absolute;top: 100px;left: 100px;width: 100px;height:100px;background-color: rgba(0,0,0,.5);
+    }
+  </style>
+</head>
+<body>
+  111<br>111
+  <div id='full'>33
+
+    <button onclick="fixed()">fixed</button>
+    <button onclick="initTouch()">initTouch</button>
+    <button onclick="initTouch2()">initTouch2</button>
+    <div id='block'></div>
+  </div>
+  <script>
+    (function () { var script = document.createElement('script'); script.src="https://cdn.jsdelivr.net/npm/eruda"; document.body.appendChild(script); script.onload = function () { eruda.init() } })();
+    document.getElementById('full').style.height = window.innerHeight + 'px';
+
+    function fixed(){
+      document.body.style.height = '0px';
+    }
+    function initTouch(){
+      document.getElementById('block').addEventListener('touchmove', e=>{
+        e.stopPropagation();
+      })
+    }
+    function initTouch2(){
+      document.getElementById('block').addEventListener('touchmove', e=>{
+        e.preventDefault();
+      })
+    }
+  </script>
+</body>
+</html>

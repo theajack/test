@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>长按esc退出全屏</title>
+    <style>
+        body{
+            font-size: 20px;
+            margin: 0;
+            padding: 0;
+            padding-top: 100px;
+            text-align: center;
+        }
+        button{
+            font-size: 20px;
+            padding: 5px 10px;
+        }
+        #logArea{
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class='button-w'>
+        <button id='fullBtn'>全屏</button>
+        <button onclick='longEsc(this)'>启用长按esc退出全屏</button>
+    </div>
+    <div class='info'></div>
+    <div id='logArea'>
+        已禁用按键默认功能, 请按下任意按键
+    </div>
+    <script>
+        let logArea = document.getElementById('logArea')
+        document.addEventListener('keydown', (e)=>{
+            logArea.innerText = 'keyCode='+ e.keyCode + '; key=' + e.key;
+            
+            e.preventDefault();
+            e.returnValue = false;
+            return false;
+        })
+        document.addEventListener('keyup', (e)=>{
+            e.preventDefault();
+            e.returnValue = false;
+            return false;
+        })
+
+        let isFull = isFullscreen();
+        let btn = document.getElementById('fullBtn')
+
+        btn.onclick = function(){
+            if(isFull){
+                this.innerText = '全屏'
+                exitFullscreen();
+            }else{
+                this.innerText = '退出全屏'
+                fullscreen();
+            }
+        }
+        function isFullscreen () {
+            if (document.fullscreenElement    ||
+                document.msFullscreenElement  ||
+                document.mozFullScreenElement ||
+                document.webkitFullscreenElement) {
+                return true;
+            }
+            return false;
+        }
+        function longEsc(obj){
+            if(navigator.keyboard && navigator.keyboard.lock){
+                navigator.keyboard.lock(['Escape']);
+                obj.innerHTML = '已启用'
+            }else{
+                alert('您的浏览器上不支持该功能')
+            }
+        }
+                
+        function fullscreen () {
+            let el = document.documentElement;
+            try {
+                if (el.requestFullscreen) {
+                    el.requestFullscreen();
+                } else if (el.mozRequestFullScreen) {
+                    /* Firefox */
+                    el.mozRequestFullScreen();
+                } else if (el.webkitRequestFullscreen) {
+                    /* Chrome, Safari and Opera */
+                    el.webkitRequestFullscreen();
+                } else if (el.msRequestFullscreen) {
+                    /* IE/Edge */
+                    el.msRequestFullscreen();
+                }
+            } catch (e) {}
+        }
+
+        function exitFullscreen () {
+            let el = document;
+            try {
+                if (el.exitFullscreen) {
+                    el.exitFullscreen();
+                } else if (el.mozCancelFullScreen) {
+                /* Firefox */
+                    el.mozCancelFullScreen();
+                } else if (el.webkitExitFullscreen) {
+                /* Chrome, Safari and Opera */
+                    el.webkitExitFullscreen();
+                } else if (el.msExitFullscreen) {
+                /* IE/Edge */
+                    el.msExitFullscreen();
+                }
+            } catch (e) {}
+        }
+
+        let exitHandler = () => {
+            isFull = isFullscreen();
+            btn.innerHTML = isFull ? '退出全屏' : '全屏'
+        }
+
+        document.addEventListener('webkitfullscreenchange', exitHandler, false);
+        document.addEventListener('mozfullscreenchange', exitHandler, false);
+        document.addEventListener('fullscreenchange', exitHandler, false);
+        document.addEventListener('MSFullscreenChange', exitHandler, false);
+
+
+    </script>
+</body>
+</html>

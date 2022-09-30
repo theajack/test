@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0;" name="viewport" />
+    <title>Document</title>
+    <style>
+        #container{
+            background-color: #ddd;
+            color: #222;
+            user-select: none;
+            position: fixed;
+            top:0;
+            left: 0;
+        }
+    </style>
+</head>
+<body>
+    <div id='container'>
+        <button onclick="alert(111)">aaa2</button>
+    </div>
+    <script src="https://cdn.jsdelivr.net/gh/theajack/easy-dom/cdn/easydom.latest.min.js"></script>
+    <script>
+        (function () { var script = document.createElement('script'); script.src="https://cdn.jsdelivr.net/npm/eruda"; document.body.appendChild(script); script.onload = function () { eruda.init() } })();
+        var $ = window.EasyDom
+        
+        let cTouchesMap = {};
+
+        function setMap(touch, newMap, ids){
+            if (typeof cTouchesMap[touch.identifier] !== 'undefined') {
+                newMap[touch.identifier] = cTouchesMap[touch.identifier];
+            } else {
+                let id = Math.abs(touch.identifier) % 10;
+                if(ids.indexOf(id)!==-1){
+                    newMap[touch.identifier] = id + 10;
+                }else{
+                    newMap[touch.identifier] = id;
+                }
+            }
+        }
+
+        function initTouchMap (e) {
+            let ids = Object.values(cTouchesMap);
+            let touches = e.touches, ctouches = e.changedTouches;
+            let newMap = {};
+            for(let i=0;i<touches.length;i++){
+                setMap(touches[i], newMap, ids);
+            }
+            if(e.type === 'touchend'){
+                for(let i=0;i<ctouches.length;i++){setMap(ctouches[i], newMap, ids);}
+            }
+            cTouchesMap = newMap;
+        }
+
+        function main(){
+            let size = $.windowSize();
+            $.query('#container').style({
+                'height': size.height+'px',
+                width: size.width+'px'
+            }).on({
+                touchstart(e){
+                    logInfo(e)
+                },
+                touchmove(e){
+                    logInfo(e)
+                },
+                touchend(e){
+                    logInfo(e)
+                }
+            })
+            function logInfo(e){
+                initTouchMap(e);
+                console.log(e.type, [].slice.call(e.touches).map(item=>{
+                    return item.identifier + ':' + cTouchesMap[item.identifier]
+                }), [].slice.call(e.changedTouches).map(item=>{
+                    return item.identifier + ':' + cTouchesMap[item.identifier]
+                }))
+            }
+            console.log(window.navigator.userAgent)
+        }
+        main();
+    </script>
+</body>
+</html>
+
+<!--
+    android: 
+        identifier: 从0递增，触点全部移开之后再次点击还是从0开始
+    ios:
+        identifier： 从一个给定的数递增（851512941），触点全部移开之后还是会递增
+-->
