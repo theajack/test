@@ -1,3 +1,8 @@
+<!--
+ * @Author: tackchen
+ * @Date: 2022-10-01 01:09:14
+ * @Description: Coding something
+-->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -16,7 +21,7 @@
             document.write('<scr' + 'ipt>eruda.init();</scr' + 'ipt>');
         })();
     </script>-->
-    <script src='https://cdn.jsdelivr.net/npm/disable-devtool@0.3.0/disable-devtool.min.js'></script>
+    <script src='https://cdn.jsdelivr.net/npm/disable-devtool@0.3.1/disable-devtool.min.js'></script>
     <script>
         const text = document.getElementById('text');
         var detectors = getUrlParam('dt')
@@ -44,8 +49,6 @@
             // url: 'https://www.baidu.com'
             detectors: detectors,
         });
-
-
 
         function getUrlParam (name) {
             const search = window.location.search;
