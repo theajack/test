@@ -27,14 +27,13 @@
 
         window.addEventListener("gamepaddisconnected", function(e) {
             console.log("gamepaddisconnected");
-            cancelRequestAnimationFrame(start);
         });
 
         window.addEventListener("gamepadconnected", function(e) {
             var gp = navigator.getGamepads()[e.gamepad.index];
             console.log("gamepadconnected: 控制器已连接于 " + gp.index + " 位：" + gp.id + "。它有 " + gp.buttons.length + " 个按钮和 " + gp.axes.length + " 个坐标方向。");
-
-            gameLoop();
+            console.log('buttons', gp.buttons)
+            console.log('gp', gp.axes);
         });
 
         function pollGamepads() {
@@ -42,9 +41,8 @@
             for (var i = 0; i < gamepads.length; i++) {
                 var gp = gamepads[i];
                 if (gp) {
-                    gamepadInfo.innerHTML = "控制器已连接于 " + gp.index + " 位：" + gp.id +
-                        "。它有 " + gp.buttons.length + " 个按钮和 " + gp.axes.length + " 个坐标方向。";
-                    console.log(gp);
+                    console.log('buttons', gp.buttons)
+                    console.log('gp', gp.axes);
                 }
             }
         }
