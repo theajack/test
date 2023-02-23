@@ -1,0 +1,53 @@
+<!--
+ * @Author: chenzhongsheng
+ * @Date: 2023-02-23 18:57:43
+ * @Description: Coding something
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>手柄手机连接测试</title>
+
+</head>
+<body>
+    <button onclick="stop()">stop</button>
+    <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
+    <script>eruda.init();</script>
+
+    <script>
+
+        var interval = setInterval(pollGamepads, 2000);
+
+        function stop(){
+            clearInterval(interval)
+        }
+
+        window.addEventListener("gamepaddisconnected", function(e) {
+            console.log("gamepaddisconnected");
+            cancelRequestAnimationFrame(start);
+        });
+
+        window.addEventListener("gamepadconnected", function(e) {
+            var gp = navigator.getGamepads()[e.gamepad.index];
+            console.log("gamepadconnected: 控制器已连接于 " + gp.index + " 位：" + gp.id + "。它有 " + gp.buttons.length + " 个按钮和 " + gp.axes.length + " 个坐标方向。");
+
+            gameLoop();
+        });
+
+        function pollGamepads() {
+            var gamepads = navigator.getGamepads ? navigator.getGamepads() : (navigator.webkitGetGamepads ? navigator.webkitGetGamepads : []);
+            for (var i = 0; i < gamepads.length; i++) {
+                var gp = gamepads[i];
+                if (gp) {
+                    gamepadInfo.innerHTML = "控制器已连接于 " + gp.index + " 位：" + gp.id +
+                        "。它有 " + gp.buttons.length + " 个按钮和 " + gp.axes.length + " 个坐标方向。";
+                    console.log(gp);
+                }
+            }
+        }
+    </script>
+</body>
+</html>
