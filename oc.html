@@ -1,0 +1,38 @@
+<!--
+ * @Author: chenzhongsheng
+ * @Date: 2023-02-28 23:07:42
+ * @Description: Coding something
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>全屏测试</title>
+  <script src="https://cdn.jsdelivr.net/npm/vconsole@latest/dist/vconsole.min.js"></script>
+</head>
+<body>
+  <button id="btn" onclick="toggleFS()">进入全屏</button>
+  <script>
+    let isFullScreen = false;
+    function toggleFS() {
+      isFullScreen = !isFullScreen;
+      console.warn(`toggle fs: ${isFullScreen}`);
+      if(isFullScreen){
+        document.body.requestFullscreen();
+      }else{
+        document.exitFullscreen();
+      }
+      document.getElementById('btn').innerText = isFullScreen ? '退出全屏': '进入全屏'
+    }
+    window.addEventListener('fullscreenchange', ()=>{
+      isFullScreen = document.fullscreen || !!document.fullscreenElement;
+      document.getElementById('btn').innerText = isFullScreen ? '退出全屏': '进入全屏'
+    });
+    window.addEventListener("orientationchange", ()=>{
+      console.warn(`orientationchange: ${window.orientation} ws=w:${window.innerWidth}_h:${window.innerHeight}`);
+    });
+  </script>
+</body>
+</html>
