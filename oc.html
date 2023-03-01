@@ -45,35 +45,93 @@
         <div id="log"></div>
     </div>
     <script>
+        const logger = (()=>{
+            var text = [];
+            var index = 0;
+            function clear() {
+                text = [];
+                TaclUI.toast.close();
+            }
+            function log(mes){
+                mes = `【${index++}】:${mes}`
+                text.push(mes)
+                TaclUI.toast(text.join('\n'), 100000);
+                console.warn(mes);
+            }
+            return {clear, log};
+        })();
+
+        function clearText(){
+            logger.clear();
+        }
+
         window.vconsole = new window.VConsole();
         let isFullScreen = false;
         window.addEventListener('fullscreenchange', () => {
             isFullScreen = document.fullscreen || !!document.fullscreenElement;
             document.getElementById('btn').innerText = isFullScreen ? '退出全屏' : '进入全屏'
         });
-        window.addEventListener("orientationchange", () => {
-            log(`orientationchange: ${window.orientation} ws=w:${window.innerWidth}_h:${window.innerHeight}`);
-        });
-        let text = [];
-        function clearText() {
-            text = [];
+
+        orientationChange((ori, reason)=>{
+            logger.log(`orientationchange ${reason}: ${ori} ws=w:${window.innerWidth}_h:${window.innerHeight}`);
+        })
+
+        function orientationChange(onchange){
+            var ori = window.orientation;
+            logger.log('window.orientation='+ ori)
+
+            const isSizeLandscape = () => window.innerWidth > window.innerHeight;
+
+            window.addEventListener("orientationchange", () => {
+                setTimeout(()=>{
+                    const oo = window.orientation;
+                    if(oo === ori) return;
+
+                    const sizeLandscape = isSizeLandscape();
+                    if(oo === 0) {
+                        if(sizeLandscape) return;
+                    }else {
+                        if(!sizeLandscape) return;
+                    }
+
+                    ori = window.orientation;
+                    onchange(ori, 'oc');
+                }, 100)
+            }, true);
+
+            if(!isMobile()) return;
+
+            let react = true;
+
+            window.addEventListener("resize", ()=>{
+                if(!react) return;
+
+                react = false;
+
+                setTimeout(()=>{react = true;}, 400)
+
+                setTimeout(()=>{
+                    let oo = isSizeLandscape() ? 90: 0;
+                    if(oo === ori) return;
+                    ori = oo;
+                    onchange(ori, 'resize');
+                }, 200)
+            }, true)
         }
+
+        function isMobile(){
+            return /(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Windows Phone|MQQBrowser)/i.test(navigator.userAgent)
+        }
+
         function toggleFS () {
             isFullScreen = !isFullScreen;
-            log(`toggle fs: ${isFullScreen}`);
+            logger.log(`toggle fs: ${isFullScreen}`);
             if (isFullScreen) {
                 document.body.requestFullscreen();
             } else {
                 document.exitFullscreen();
             }
             document.getElementById('btn').innerText = isFullScreen ? '退出全屏' : '进入全屏'
-        }
-        var index = 0;
-        function log(mes){
-            mes = `【${index++}】:${mes}`
-            text.push(mes)
-            TaclUI.toast(text.join('\n'), 100000);
-            console.warn(mes);
         }
     </script>
 </body>
