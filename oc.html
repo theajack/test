@@ -41,7 +41,7 @@
     <video controls="controls" autoplay="true" src="https://www.w3school.com.cn/i/movie.ogg"></video>
     <div id="btnWrapper">
         <button id="btn" onclick="toggleFS()">进入全屏1</button>
-        <button onclick="toggleVconsole()">vconsole</button>
+        <button onclick="clearText()">clear mes</button>
         <div id="log"></div>
     </div>
     <script>
@@ -54,10 +54,9 @@
         window.addEventListener("orientationchange", () => {
             log(`orientationchange: ${window.orientation} ws=w:${window.innerWidth}_h:${window.innerHeight}`);
         });
-        var vshow = false
-        function toggleVconsole() {
-            vshow = !vshow;
-            vshow ? vconsole.show(): vconsole.hide();
+        let text = [];
+        function clearText() {
+            text = [];
         }
         function toggleFS () {
             isFullScreen = !isFullScreen;
@@ -71,8 +70,10 @@
         }
         var index = 0;
         function log(mes){
-            TaclUI.toast(mes, 100000);
-            console.warn(`【${index++}】:${mes}`);
+            mes = `【${index++}】:${mes}`
+            text.push(mes)
+            TaclUI.toast(text.join('\n'), 100000);
+            console.warn(mes);
         }
     </script>
 </body>
