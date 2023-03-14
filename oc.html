@@ -71,6 +71,10 @@
             isFullScreen = document.fullscreen || !!document.fullscreenElement;
             document.getElementById('btn').innerText = isFullScreen ? '退出全屏' : '进入全屏'
         });
+        console.log('size=',window.innerWidth, window.innerHeight);
+        window.addEventListener('resize', () => {
+            console.log('resize:', window.innerWidth, window.innerHeight);
+        });
 
         // window.addEventListener("orientationchange", () => {
         //     setTimeout(()=>{
