@@ -1,0 +1,135 @@
+<!--
+ * @Author: chenzhongsheng
+ * @Date: 2023-06-14 15:04:28
+ * @Description: Coding something
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TOUCH_LOST</title>
+    <style>
+        body{
+            overflow: hidden;
+        }
+        #container{
+            box-sizing: border-box;
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #666;
+            padding: 50px;
+            text-align: center;
+            color: #fff;
+        }
+        .click-text{
+            flex:1;
+            font-size: 30px;
+            font-weight: bold;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
+    <script>eruda.init();</script>
+</head>
+<body>
+    <div id="container">
+        <div>请模拟左手快速滑动，右手快速点击的操作。类似玩王者的操作。</div>
+        <div style="display:flex;margin-top:40px">
+            <div style="flex:1">左手点击次数</div>
+            <div style="flex:1">右手点击次数</div>
+        </div>
+        <div style="display:flex;">
+            <div class="click-text" id="left">0</div>
+            <div class="click-text" id="right">0</div>
+        </div>
+        <div>
+            <button id="button">清除</button>
+        </div>
+    </div>
+    <script>
+        window.onload = ()=>{
+            main();
+        }
+
+        let left = 0;
+        let right = 0;
+        const leftEl = document.getElementById('left');
+        const rightEl = document.getElementById('right');
+        leftEl.style.backgroundColor = 'transparent'
+        // rightEl.style.backgroundColor = 'transparent'
+        function updateClickCount(data){
+            if(data.left) {
+                left ++;
+                leftEl.style.backgroundColor = leftEl.style.backgroundColor === 'transparent' ? '#444': 'transparent'
+            }
+            if(data.right) {
+                right ++;
+                // rightEl.style.backgroundColor = rightEl.style.backgroundColor === 'transparent' ? '#444': 'transparent'
+            }
+
+            leftEl.innerText = left;
+            rightEl.innerText = right;
+        }
+
+        const btn=document.getElementById('button')
+        btn.addEventListener('click', ()=>{
+            left=0;
+            right=0;
+            leftEl.style.backgroundColor = 'transparent'
+            updateClickCount({});
+        })
+        btn.addEventListener('touchstart', (e)=>{
+            event.stopPropagation();
+        })
+
+        function main(){
+            const isPortrait = window.orientation === 0;
+
+            const isLeft = (e)=>{
+                return isPortrait ? e.clientY < window.innerHeight/2
+                    : e.clientX < window.innerWidth/2;
+            }
+
+            var container = document.getElementById('container');
+            if(isPortrait){
+                setTimeout(()=>{
+                    container.style.width = window.innerHeight+'px';
+                    container.style.height = window.innerWidth+'px';
+                    container.style.transform = 'rotate(90deg)';
+                    container.style.transformOrigin = `${window.innerWidth/2}px ${window.innerWidth/2}px`
+                }, 100)
+            }
+            container.addEventListener('touchstart', (event) => {
+            // mock.unifier.unite(event);
+            const changedTouches = event.changedTouches;
+            // eslint-disable-next-line @typescript-eslint/prefer-for-of
+            const time = Date.now();
+
+            for (let i = 0; i < changedTouches.length; i++) {
+                const t = changedTouches[i];
+                let str = `[${time}]: ${i+1}/${changedTouches.length}; id=${t.identifier}; (${parseInt(t.clientX)},${parseInt(t.clientY)})`;
+                if (isLeft(t)) {
+                    str = `Left${left}${str}`;
+                    updateClickCount({left: true});
+                }else{
+                    str = `Right${left}${str}`;
+                    updateClickCount({right: true});
+                }
+                console.log(str)
+            }
+            event.preventDefault();
+        });
+        container.addEventListener('touchmove', (event) => {
+            // mock.unifier.unite(event);
+        });
+        container.addEventListener('touchend', (event) => {
+            // mock.unifier.unite(event);
+        });
+    }
+    </script>
+</body>
+</html>
